@@ -4,34 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mini-Calculadora con Botones</title>
+    <title>Mini Calculadora</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 40px;
+            background: #f0f2f5;
+            color: #333;
         }
 
-        /* margin-bottom da espacio en la parte de abajo */
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         .grupo-formulario {
-            margin-bottom: 18px;
-            color: rgb(41, 39, 39);
+            margin-bottom: 15px;
         }
 
         label {
-            margin: 4px;
             font-weight: bold;
+            display: block;
+            margin-bottom: 4px;
         }
 
-        /* Se pone el type par identificar el tipo de input que hay: Texto y Numero */
         input[type="number"],
         input[type="text"] {
-            width: 220px;
-            padding: 6px;
-            margin-bottom: 8px;
+            width: 100%;
+            max-width: 250px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
 
-        /* Flex-wrap permite a los botones acomodarse en varias lineas y
-        gap da espaco entre los bloques/ display sirve para mostrar u ocultar elementos*/
         .grupo-botones {
             display: flex;
             flex-wrap: wrap;
@@ -40,80 +46,86 @@
         }
 
         button {
-            width: 125px;
-            box-sizing: border-box;
-            padding: 8px 18px;
+            flex: 1 1 120px;
+            padding: 10px;
             font-size: 1em;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            transition: 0.2s;
         }
 
-        .grupo-botones button#limpiar {
-            background: #00ff62;
-            color: black;
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .btn-operacion {
+            background: #3b82f6;
+            color: white;
+        }
+
+        #limpiar {
+            background: #10b981;
+            color: white;
+        }
+
+        #resultado {
+            background: #e5e7eb;
+            font-weight: bold;
         }
     </style>
 </head>
 
 <body>
-    <h2>Calculadora simple</h2>
-    <!-- label asocia un texto a un elemento de formulario -->
+    <h2>Calculadora Simple</h2>
+
     <div class="grupo-formulario">
         <label for="numero1">Número 1:</label>
-        <input type="number" id="numero1" placeholder="ingresa el primer numero">
+        <input type="number" id="numero1" placeholder="Ingresa el primer número">
     </div>
-    <!-- Input sirve para inserta datos y el id es para identificar el input -->
+
     <div class="grupo-formulario">
         <label for="numero2">Número 2:</label>
-        <input type="number" id="numero2" placeholder="ingresa el primer numero">
+        <input type="number" id="numero2" placeholder="Ingresa el segundo número">
     </div>
-    <!-- readonly sirve para que en un input no se pueda escribir -->
+
     <div class="grupo-formulario">
         <label for="resultado">Resultado:</label>
-        <input type="text" id="resultado" readonly placeholder="Aqui aparece el resultado">
+        <input type="text" id="resultado" readonly placeholder="Aquí aparece el resultado">
     </div>
+
     <div class="grupo-botones">
-        <button onclick="calcular('sumar')">Sumar</button>
-        <button onclick="calcular('restar')">Restar</button>
-        <button onclick="calcular('multiplicar')">Multiplicar</button>
-        <button onclick="calcular('dividir')">Dividir</button>
+        <button class="btn-operacion" onclick="calcular('sumar')">Sumar</button>
+        <button class="btn-operacion" onclick="calcular('restar')">Restar</button>
+        <button class="btn-operacion" onclick="calcular('multiplicar')">Multiplicar</button>
+        <button class="btn-operacion" onclick="calcular('dividir')">Dividir</button>
     </div>
+
     <div class="grupo-botones">
-        <button onclick="calcular('residuo')">Residuo</button>
-        <button onclick="calcular('potencia')">Potencia</button>
-        <button onclick="calcular('raizydex')">Raiz Y de X</button>
+        <button class="btn-operacion" onclick="calcular('residuo')">Residuo</button>
+        <button class="btn-operacion" onclick="calcular('potencia')">Potencia</button>
+        <button class="btn-operacion" onclick="calcular('raizydex')">Raíz Y de X</button>
         <button id="limpiar" onclick="limpiar()">Limpiar</button>
     </div>
 
     <script>
-        // window.onload hace que cuando cargue la pagina el foco se vaya al texto 1
-        window.onload = function() {
-            document.getElementById('numero1').focus();
-        }
-        //getElemtById sirve para identificar el elemento por su id
+        // Foco inicial
+        window.onload = () => document.getElementById('numero1').focus();
+
         function limpiar() {
             document.getElementById('numero1').value = '';
             document.getElementById('numero2').value = '';
             document.getElementById('resultado').value = '';
-
-        //aqui volvemos a la primera opción en el cuadro para seleccionar la operación
-
-            document.getElementById('oparacion').selectIndex = 0;
-        //hace que el cursor se vaya al numero1 al limpiar
             document.getElementById('numero1').focus();
-            
         }
-        //parseFloat convierte las cadenas de texto a numeros 
-        //const = constante
+
         function calcular(operacion) {
             const num1 = parseFloat(document.getElementById('numero1').value);
             const num2 = parseFloat(document.getElementById('numero2').value);
-
             let resultado;
-            // isNaN sirve para que lo que se ingrese sea siempre un numero si no es un numero sale "Ingresa numeros validos"
-            // || significa 'o'
-            if (isNaN(num1) || isNaN(num2)) {
-                resultado = "Ingresa numeros validos";
 
+            if (isNaN(num1) || isNaN(num2)) {
+                resultado = "Ingresa números válidos";
             } else {
                 switch (operacion) {
                     case 'sumar':
@@ -122,39 +134,35 @@
                     case 'restar':
                         resultado = num1 - num2;
                         break;
-                    //si num2 es igual a 0 saldra el mensaje de errror en caso de que no se cumpla la condicion hara la division sin problema
-                    // != ---> operador de condicion ternario.
-                    case 'dividir':
-                        resultado = num2 != 0 ? num1 / num2: "Error: división por cero";
-                        break;
                     case 'multiplicar':
                         resultado = num1 * num2;
                         break;
+                    case 'dividir':
+                        resultado = num2 !== 0 ? (num1 / num2) : "Error: división por cero";
+                        break;
                     case 'residuo':
-                        // % saca el residuo del numero
-                        resultado = num1 % num2;
+                        resultado = num2 !== 0 ? (num1 % num2) : "Error: división por cero";
                         break;
                     case 'potencia':
-                        // Math.pow significa la potencia de x
-                        resultado = Math.pow (num1 , num2);
+                        resultado = Math.pow(num1, num2);
                         break;
                     case 'raizydex':
-                        // math.pow(x, 1/y) saca la raiz del numero 
-                        resultado = Math.pow (num1, 1/num2);
+                        if (num2 === 0) {
+                            resultado = "Error: raíz de índice 0";
+                        } else if (num1 < 0 && num2 % 2 === 0) {
+                            resultado = "Error: raíz par de número negativo";
+                        } else {
+                            resultado = Math.pow(num1, 1 / num2);
+                        }
                         break;
+                    default:
+                        resultado = "Operación no válida";
                 }
             }
-        document.getElementById('resultado').value = resultado;    
+
+            document.getElementById('resultado').value = resultado;
         }
-        
-
-        
-        
-       
-
     </script>
-
-
 </body>
 
 </html>
